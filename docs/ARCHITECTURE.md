@@ -80,6 +80,7 @@ The result is a modular system where each business event triggers the appropriat
 │   Email + WhatsApp             │
 └────────────────────────────────┘
 
+```
 
 ## Core Architectural Principle
 
