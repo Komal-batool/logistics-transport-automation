@@ -1,100 +1,84 @@
 # System Architecture
 
-## Architecture Overview
+## Overview
 
-This project implements a modular, event-driven logistics automation architecture designed to connect the complete transport lifecycle through a centralized Job ID.
+This project implements an event-driven logistics automation architecture designed to connect the complete transport lifecycle through a centralized Job ID.
 
-The architecture separates customer-facing interfaces, business logic, operational data, document management, and communication into distinct layers.
+The architecture separates customer-facing interfaces, workflow orchestration, operational data, document storage, document generation, and customer communication into dedicated components.
 
-This approach makes the system easier to maintain, test, extend, and integrate with additional business services.
+The result is a modular system where each business event triggers the appropriate automation workflow.
 
 ---
 
 ## High-Level Architecture
 
 ```text
-                         CUSTOMER
-                            │
-                            ▼
-                 ┌─────────────────────┐
-                 │      WordPress      │
-                 │ Customer Request    │
-                 │      Form           │
-                 └──────────┬──────────┘
-                            │
-                         Webhook
-                            │
-                            ▼
-                 ┌─────────────────────┐
-                 │        n8n          │
-                 │ Automation &        │
-                 │ Orchestration Layer │
-                 └──────────┬──────────┘
-                            │
-              ┌─────────────┼─────────────┐
-              │             │             │
-              ▼             ▼             ▼
-         Job ID         Pricing       Validation
-        Generation       Engine          Logic
-              │             │             │
-              └─────────────┼─────────────┘
-                            │
-                            ▼
-                 ┌─────────────────────┐
-                 │    Google Sheets    │
-                 │ Transport Order    │
-                 │    Data Layer       │
-                 └──────────┬──────────┘
-                            │
-                            │ Job ID
-                            ▼
-                 ┌─────────────────────┐
-                 │ Driver Mobile       │
-                 │ Interface           │
-                 │ WordPress / Form    │
-                 └──────────┬──────────┘
-                            │
-                     Driver Submission
-                            │
-                            ▼
-                 ┌─────────────────────┐
-                 │        n8n          │
-                 │ Driver Processing   │
-                 └──────────┬──────────┘
-                            │
-             ┌──────────────┼──────────────┐
-             │              │              │
-             ▼              ▼              ▼
-        Signatures       Photos        Timestamps
-             │              │              │
-             └──────────────┼──────────────┘
-                            │
-                            ▼
-                 ┌─────────────────────┐
-                 │ Delivery Processing │
-                 └──────────┬──────────┘
-                            │
-                            ▼
-                 ┌─────────────────────┐
-                 │ PDF Generation      │
-                 │ Delivery Note       │
-                 └──────────┬──────────┘
-                            │
-                            ▼
-                 ┌─────────────────────┐
-                 │    Google Drive     │
-                 │ Document Storage    │
-                 └──────────┬──────────┘
-                            │
-                            ▼
-              ┌────────────────────────────┐
-              │ Customer Communication     │
-              │                            │
-              │ Email + WhatsApp           │
-              └────────────────────────────┘
-
-
-```text
+┌───────────────────────┐
+│       Customer        │
+│   Quote / Request     │
+└──────────┬────────────┘
+           │
+           ▼
+┌───────────────────────┐
+│       WordPress       │
+│   Customer Form       │
+└──────────┬────────────┘
+           │ Webhook
+           ▼
+┌────────────────────────────────┐
+│              n8n               │
+│      Automation Layer          │
+│                                │
+│ • Request Processing           │
+│ • Job ID Generation            │
+│ • Business Logic               │
+│ • Pricing Calculation          │
+│ • Driver Workflow              │
+│ • Document Orchestration       │
+│ • Notifications                │
+└──────────┬─────────────────────┘
+           │
+           ▼
+┌───────────────────────┐
+│    Transport Order    │
+│     Data Layer        │
+│    Google Sheets      │
+└──────────┬────────────┘
+           │
+           ├──────────────────────┐
+           │                      │
+           ▼                      ▼
+┌───────────────────┐    ┌────────────────────┐
+│  Driver Interface │    │  Business Services │
+│    WordPress      │    │ Pricing / APIs     │
+└─────────┬─────────┘    └────────────────────┘
+          │
+          │ Driver Updates
+          ▼
+┌────────────────────────────────┐
+│       Existing Transport       │
+│          Order / Job ID        │
+└──────────────┬─────────────────┘
+               │
+               ▼
+┌───────────────────────┐
+│ Delivery Documentation│
+│   PDF Generation      │
+└──────────┬────────────┘
+           │
+           ▼
+┌───────────────────────┐
+│     Google Drive      │
+│ Secure Document       │
+│       Storage         │
+└──────────┬────────────┘
+           │
+           ▼
+┌────────────────────────────────┐
+│       Notifications            │
+│                                │
+│   Email + WhatsApp             │
+└────────────────────────────────┘
 
 
 ## Core Architectural Principle
@@ -177,7 +161,6 @@ Pickup information
 Delivery information
 Document references
 Workflow status
-
 ### 4. Google Drive
 
 Google Drive is used as the document storage layer.
@@ -211,7 +194,7 @@ The communication layer is separated from the core transport-order logic so that
 
 Event-Driven Workflow
 
-## The system follows an event-oriented model.
+The system follows an event-oriented model.
 
 Customer Request
 Customer submits form
@@ -249,7 +232,7 @@ Document stored
 Customer notified
 Separation of Responsibilities
 
-## The architecture intentionally separates responsibilities.
+### The architecture intentionally separates responsibilities.
 
 Layer	Responsibility
 WordPress	User interface
