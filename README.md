@@ -50,21 +50,6 @@ Customer requests submitted through the website enter the automation layer throu
 
 The system validates incoming information, prepares the transport data, generates a unique Job ID, and creates the transport order.
 
-### Intelligent Internal Pricing
-
-Each transport request can be evaluated against internal pricing rules including:
-
-- distance
-- transport time
-- fuel costs
-- vehicle costs
-- driver costs
-- fixed operating costs
-- profit margin
-- business pricing rules
-
-The pricing engine operates internally and does not expose business pricing logic to customers.
-
 ### Unified Transport Order
 
 Every transport operation is associated with a single Job ID.
