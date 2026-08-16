@@ -93,6 +93,8 @@ This approach makes the system easier to maintain, test, extend, and integrate w
               │ Email + WhatsApp           │
               └────────────────────────────┘
 
+```text
+
 ## Core Architectural Principle
 
 The system is built around one central concept:
