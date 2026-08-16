@@ -1,9 +1,3 @@
-
----
-
-# `docs/WORKFLOWS.md`
-
-```markdown
 # Workflow Architecture
 
 The system is divided into specialized automation workflows.
